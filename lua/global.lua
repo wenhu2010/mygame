@@ -24,3 +24,10 @@ function newObject( self, o )
     self.__index = self
     return o
 end
+
+function inherite(class, o)
+    o = o or {}
+    setmetatable(o, class)
+    class.__index = class
+    return o
+end

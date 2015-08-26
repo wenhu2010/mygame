@@ -55,22 +55,20 @@ function NfComboSkill.Attack( self )
     local bulletModel = skill.BulletModel
     local hitTime = skill.HitTime
 
-    waitTime(hitTime)
+    skill:AddEvent(hitTime, function()
+        local endTime = time - hitTime
+        local targets = skill:FindTargets(true)
 
-    local endTime = time - hitTime
-    local targets = skill:FindTargets(true)
+        for i=0, targets.Count-1 do
+            local c = targets[i]
+            local beginPos = attacker.position + Vector3(0,0.6,0)
+            local endPos = Vector3(c.position.x, 0.6, c.position.z)
+            skill:PlayChainEff(bulletModel, endTime, beginPos, endPos)
+            skill:CalcDamage(attacker, c, dam, 0)
+        end
 
-    for i=0, targets.Count-1 do
-        local c = targets[i]
-        local beginPos = attacker.position + Vector3(0,0.6,0)
-        local endPos = Vector3(c.position.x, 0.6, c.position.z)
-        skill:PlayChainEff(bulletModel, endTime, beginPos, endPos)
-        skill:CalcDamage(attacker, c, dam, 0)
-    end
-
-    waitTime(endTime)
-
-    skill:End()
+        skill:End(endTime)
+    end)
 end
 
 function NfComboSkill.onEnd(self)

@@ -1,8 +1,6 @@
-require 'global'
+require 'NfSkillBase'
 
-local NfComboBeginAttack = {
-    skill,
-    attacker,
+local NfComboBeginAttack = NfSkillBase:New{
     target,
     targets,
     keepEff
@@ -16,29 +14,37 @@ function NfComboBeginAttack.onBegin(self)
     self.attacker.target = self.target
 
     local attacker = self.attacker
-    local target = self.target
 
     skill:StartCameraAnim()
 
-    startCoroutine(function()
-        
-        local singAnim = skill.SingAnim
-        if singAnim ~= "null" then
-            skill:PlaySingAnimAndEffect()
-            local singTime = attacker:GetAnimLength(singAnim)
-            waitTime(singTime)
-        end
+    local singTime = 0
+    local singAnim = skill.SingAnim
+    if singAnim ~= "null" then
+        skill:PlaySingAnimAndEffect()
+        singTime = attacker:GetAnimLength(singAnim)
+    end
 
-        self.keepEff = skill:PlayEffect(attacker, skill.KeepEffect, -1)
+    skill:AddEvent(singTime, function( )
+        NfComboBeginAttack.Fire(self)
+    end)
+end
 
-        self.targets = skill:FindTargets(true)
-        
-        local dest = target.position + target.direction * NfSkill.CalcRadius(attacker, target)
+function NfComboBeginAttack.CanFanJi(self)
+    return true
+end
 
-        skill:Move(attacker, dest, skill.BulletSpeed, skill.KeepAnim, attacker.moveAnimSpeed, function()
-            self.OnAttack(self, dest)
-        end)
+function NfComboBeginAttack.Fire(self)
+    local skill = self.skill
+    local attacker = self.attacker
+    local target = self.target
 
+    self.keepEff = skill:PlayEffect(attacker, skill.KeepEffect, -1)
+    self.targets = skill:FindTargets(true)
+    
+    local dest = target.position + target.direction * NfSkill.CalcRadius(attacker, target)
+
+    skill:Move(attacker, dest, skill.BulletSpeed, skill.KeepAnim, attacker.moveAnimSpeed, function()
+        self.OnAttack(self, dest)
     end)
 end
 
@@ -48,8 +54,6 @@ function NfComboBeginAttack.OnAttack(self, dest)
     local target = self.target
 
     skill:DestroyEff(self.keepEff)
-        	
-	print(dest.x, dest.y, dest.z)
 
     attacker.position = dest
     attacker:LookAt(target.position)
@@ -62,9 +66,6 @@ function NfComboBeginAttack.OnAttack(self, dest)
     local breakAtk = false
     for i=0,target.Buffs.Count-1 do
         local buff = target.Buffs[i]
-        print(tostring(buff))
-
-        print(buff.id, buff.enabled)
         if buff.enabled and buff:HandleBeHitPre(attacker) then
             breakAtk = true
             break
@@ -72,9 +73,7 @@ function NfComboBeginAttack.OnAttack(self, dest)
     end
 
     if breakAtk then
-        skill:AddEvent(animLen, function()
-        	skill:End()
-        end)
+        skill:End(animLen)
     else
         -- 目标伤害计算
         skill:CalcDamage(skill.Damage, self.targets, hitTime)
@@ -85,8 +84,8 @@ function NfComboBeginAttack.OnAttack(self, dest)
 
         skill:AddEvent(animLen, function()  
             -- 第二下攻击
-            local skill = skill:DoTskill()
-            if skill ~= null then
+            local tskill = skill:DoTskill()
+            if tskill ~= nil then
                 skill:End()
             else
                 skill:MoveSrcPos(attacker)

@@ -1,8 +1,6 @@
-require 'global'
+require 'NfSkillBase'
 
-local NfComboAttack = {
-    skill,
-    attacker
+local NfComboAttack = NfSkillBase:New{
 }
 
 function NfComboAttack.onBegin(self)
@@ -11,33 +9,37 @@ function NfComboAttack.onBegin(self)
 
     skill:StartCameraAnim()
 
-    startCoroutine(function()
-        
-        local singAnim = skill.SingAnim
-        if singAnim ~= "null" then
-            skill:PlaySingAnimAndEffect()
-            local singTime = attacker:GetAnimLength(singAnim)
-            waitTime(singTime)
-        end
+    local singTime = 0
+    local singAnim = skill.SingAnim
+    if singAnim ~= "null" then
+        skill:PlaySingAnimAndEffect()
+        singTime = attacker:GetAnimLength(singAnim)
+    end
+    
+    skill:AddEvent(singTime, function( )
+        NfComboAttack.Fire(self)
+    end)
+end
 
-        skill:PlayFireAnimAndEffect()
+function NfComboAttack.Fire(self)
+    local skill = self.skill
+    local attacker = self.attacker
 
-        local bullet = skill.BulletModel
-        if bullet ~= "null" then
-            skill:PlayEffect(attacker.target, bullet, 3)
-        end
+    skill:PlayFireAnimAndEffect()
 
-        -- 目标伤害计算
-        local targets = skill:FindTargets(true)
-        skill:CalcDamage(skill.Damage, targets, skill.HitTime)
+    local bullet = skill.BulletModel
+    if bullet ~= "null" then
+        skill:PlayEffect(attacker.target, bullet, 3)
+    end
 
-        local animLen = attacker:GetAnimLength(skill.FireAnim)
-        waitTime(animLen)
+    -- 目标伤害计算
+    local targets = skill:FindTargets(true)
+    skill:CalcDamage(skill.Damage, targets, skill.HitTime)
 
+    local animLen = attacker:GetAnimLength(skill.FireAnim)
+    skill:AddEvent(animLen, function()
         skill:DoTskill()
-
         skill:End()
-
     end)
 end
 

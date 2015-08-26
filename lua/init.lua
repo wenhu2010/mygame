@@ -1,24 +1,14 @@
-﻿
-require 'global'
+﻿require "global"
+
+print "初始化完成"
 
 local test = {
-	v1 = 0,
+	v1 = 100,
 	v2 = 0
 }
 
-function test.new(o)
-	o = o or {}
-	setmetatable(o, test)
-	test.__index = test
-	return o
-end
-
-function test.func1(self, v)
-	self.v1 = v
-end
-
-function test.print(self)
-	print("v1", self.v1)
+function test.func1()
+	print("v1", test.v1)
 end
 
 return test

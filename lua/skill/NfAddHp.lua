@@ -1,8 +1,6 @@
-require 'global'
+require 'NfSkillBase'
 
-local NfAddHp = {
-    skill,
-    attacker
+local NfAddHp = NfSkillBase:New{
 }
 
 function NfAddHp.onBegin(self)
