@@ -49,7 +49,7 @@ function NfCSBase.MoveSrc(self)
     for i=0, attackers.Count-1 do
         local c = attackers[i]
         c.position = c.SrcPos
-        c:Idle()
+        --c:Idle()
     end
 end
 

@@ -29,7 +29,6 @@ function NfCSBianShen.Fire( self )
 
     local buffLv = skill.lv
     local buff1 = buffs[0]
-    local buff2 = buffs[1]
     attacker:AddBuff(attacker, buff1, buffLv)
 
     if skill.Tskill ~= -1 then
@@ -38,9 +37,12 @@ function NfCSBianShen.Fire( self )
         end)
     end
 
-    for i=1, attackers.Count-1 do
-        local c = attackers[i]
-        c:AddBuff(c, buff2, buffLv)
+    if buffs.Count > 1 then
+        local buff2 = buffs[1]
+        for i=1, attackers.Count-1 do
+            local c = attackers[i]
+            c:AddBuff(c, buff2, buffLv)
+        end
     end
 
     skill:End(skill.TotalTime)

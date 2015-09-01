@@ -3,8 +3,7 @@ require 'NfSkillBase'
 local NfFear = NfSkillBase:New{
     target,
     effKeepObj,
-    destPos,
-    destSlot
+    destPos
 }
 
 function NfFear.onBegin(self)
@@ -43,7 +42,7 @@ function NfFear.Fear(self, target)
     self.destPos = target.position
     local fearPos = target.position
     if slots.Count > 0 then
-    	target.slot = slots[slots.Count-1]
+    	target.slot = slots[0]
     	self.destPos = Fight.Inst:GetSlotPos(target.camp, target.slot)
     	target.SrcPos = self.destPos
     	Fight.Inst:SortAllChar()
@@ -92,7 +91,7 @@ function NfFear.onEnd(self)
 	local target = self.target
     if target ~= nil then
         target.isFear = false
-        target:DestroyEff(effKeepObj)
+        target:DestroyEff(self.effKeepObj)
         if target.IsDead == false then
         	target:MoveBack()
         end

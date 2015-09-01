@@ -1,4 +1,3 @@
-﻿
 require 'global'
 
 local NewShowRoles = {}
@@ -12,8 +11,15 @@ function NewShowRoles.Start()
 	local o = Helper.FindObject(gameObject, "QianNeng")
 	local lookJiban = o:GetComponent("UIButton")
 	EventDelegate.Add(lookJiban.onClick, function()
-		print "jiban"
-		local winObj = NfUIMgr.CreateWindow("")
+		local x = {
+			uid=6018,
+			lasttime=0,
+			info="okjfljd"
+		}
+
+		send("", x, function(recv)
+			utility.print(recv)
+		end)
 	end)
 end
 

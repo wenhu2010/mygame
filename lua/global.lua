@@ -1,24 +1,8 @@
 ﻿
 import "UnityEngine"
+local msgpack = require 'MessagePack'
 
-function startCoroutine(fn)
-    local c=coroutine.create(fn)
-    coroutine.resume(c)
-end
-
-function waitTime(sec)
-    Yield(WaitForSeconds(sec))
-end
-
-function waitEnd()
-    Yield(WaitForEndOfFrame())
-end
-
-function waitFrameUpdate()
-    Yield(WaitForFixedUpdate())
-end
-
-function newObject( self, o )
+function newObject(self, o)
     o = o or {}
     setmetatable(o, self)
     self.__index = self
@@ -30,4 +14,11 @@ function inherite(class, o)
     setmetatable(o, class)
     class.__index = class
     return o
+end
+
+function send(fn, param, call)
+    param.func = fn
+    Http.Send(msgpack.pack(param), function(buf)
+        call(msgpack.unpack(buf))
+    end)
 end
