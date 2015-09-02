@@ -7,6 +7,10 @@ NfCSBase = NfSkillBase:New{
 function NfCSBase.onBegin(self, slot)
     local skill = self.skill
 
+    if self.attacker.camp == CampType.Enemy then
+        slot = 11
+    end
+
     self.attackers = skill:GetComboCharList()    
 
     skill:HideScene() 

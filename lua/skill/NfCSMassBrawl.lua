@@ -10,7 +10,14 @@ function NfCSMassBrawl.onBegin(self)
     local targets = skill:FindAllAttackTarget(self.attacker)
     self.targets = targets
 
-    NfCSBase.onBegin(self, target.slot)
+    self.attackers = skill:GetComboCharList()    
+
+    skill:HideScene() 
+
+    self.PlayCombAnimAndEffect(self, target.slot)
+
+    skill:StartCameraAnim()
+    skill:HideAllFriend(self.attackers)
 
     ShowChars(targets, false)
     target.visible = true
