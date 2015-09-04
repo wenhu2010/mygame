@@ -19,7 +19,7 @@ function NfFear.onBegin(self)
 
     local hitTime = skill.HitTime
 
-    skill:AddEvent(hitTime, function( )
+    skill:AddEvent(hitTime, function()
 	    local dam = skill.Damage
 		local targets = skill:FindTargets(true)
 		for i=0,targets.Count-1 do
@@ -59,7 +59,7 @@ function NfFear.RandPos(pos, r)
     return Vector3(x, pos.y, z)
 end
 
-function NfFear.FearMove(self, target, fearPos, num, delay )
+function NfFear.FearMove(self, target, fearPos, num, delay)
     local skill = self.skill
     local attacker = self.attacker
 

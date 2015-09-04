@@ -24,7 +24,7 @@ end
 
 utility = {}
 
-utility.print = function(data)
+function utility.print(data)
 	local cstring = tableprint(data,"  ")
 	print(cstring)
 end

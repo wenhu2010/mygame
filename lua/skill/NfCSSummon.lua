@@ -1,6 +1,7 @@
 ﻿require 'NfCSBase'
 
 local NfCSSummon = NfCSBase:New{
+    summon,
 }
 
 function NfCSSummon.onBegin(self)
@@ -18,7 +19,7 @@ function NfCSSummon.Fire( self )
     local attackers = self.attackers
     local slots = skill:GetEmptySlots()
     local slot = 0
-    if skill.Range == 0 then
+    if skill.rangeType == 0 then
         slot = slots[slots.Count - 1]
     else
         slot = slots[0]
@@ -34,10 +35,27 @@ function NfCSSummon.Fire( self )
     lv = lv / attackers.Count
     jie = jie / attackers.Count
 
-    local c = skill:Summon(skill.Tbuff, slot, Mathf.RoundToInt(lv), Mathf.RoundToInt(jie))
-    skill:PlayEffect(c, skill.FireEffect, 3)
+    local destPos
+    if self.attacker.camp == CampType.Friend then
+        destPos = GetSlotPos(self.attacker.camp, 11)
+    else
+        destPos = Vector3.zero
+    end
+    
+    local eff = skill:PlayEffect(skill.FireEffect, 3)
+    eff.position = destPos
+
+    skill:AddEvent(skill.HitTime, function()
+        self.summon = skill:Summon(skill.Tbuff, slot, Mathf.RoundToInt(lv), Mathf.RoundToInt(jie))
+        self.summon.position = destPos
+    end)
 
     skill:End(skill.TotalTime)
+end
+
+function NfCSSummon.OnStopCameraAnim(self)
+    NfCSBase.OnStopCameraAnim(self)
+    self.summon.position = self.summon.SrcPos
 end
 
 return NfCSSummon

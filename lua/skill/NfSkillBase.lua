@@ -35,6 +35,10 @@ function CheckLua()
     end
 end
 
+function GetSlotPos(camp, slot)
+    return Fight.Inst:GetSlotPos(camp, slot)
+end
+
 NfSkillBase = {
     skill,
     attacker
