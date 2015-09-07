@@ -13,15 +13,14 @@ function NfCSCDir.onBegin(self)
     end)
 end
 
-function NfCSCDir.Fire( self )
+function NfCSCDir.Fire(self)
     local skill = self.skill
     local attacker = self.attacker
     local attackers = self.attackers
     local targets = skill:FindAllAttackTarget(attacker)
     local dam = skill:GetComboDamage(attackers)
-    local pos = Fight.Inst:GetSlotPos(RevCamp(self.attacker.camp), 2)
-
-    skill:FireDirBullet(targets, attacker.position, pos, skill.BulletModel, skill.BulletSpeed, dam, skill.AtkC, skill.HitTime, skill.BulletRadius)
+    local pos = Fight.Inst:GetSlotPos(RevCamp(attacker.camp), 2)
+    skill:FireDirBullet(targets, GetSlotPos(attacker.camp, 0), pos, skill.BulletModel, skill.BulletSpeed, dam, skill.AtkC, skill.HitTime, skill.BulletRadius)
 
     skill:End(skill.TotalTime)
 end

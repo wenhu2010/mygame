@@ -14,7 +14,7 @@ function NfCSSummon.onBegin(self)
     end)
 end
 
-function NfCSSummon.Fire( self )
+function NfCSSummon.Fire(self)
     local skill = self.skill
     local attackers = self.attackers
     local slots = skill:GetEmptySlots()

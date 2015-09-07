@@ -13,36 +13,35 @@ function NfCSBianShen.onBegin(self)
     end)
 end
 
-function NfCSBianShen.Fire( self )
+function NfCSBianShen.Fire(self)
     local skill = self.skill
     local attacker = self.attacker
     local attackers = self.attackers
-
     local buffs = skill.Buffs
     local tbuffs = skill.Tbuffs
 
-    -- 删除变身buff
-    for i=0, tbuffs.Count-1 do
-        local b = tbuffs[i]
-        attacker:EndBuff(b)
-    end
+    local i = 0
+    while i < skill.MaxNum and i < attackers.Count do
+        local c = attackers[i]
+        -- 删除变身buff
+        for i=0, tbuffs.Count-1 do
+            local b = tbuffs[i]
+            c:EndBuff(b)
+        end
 
-    local buffLv = skill.lv
-    local buff1 = buffs[0]
-    attacker:AddBuff(attacker, buff1, buffLv)
+        local buffLv = skill.lv
+        for i=0, buffs.Count-1 do
+            local b = buffs[i]
+            c:AddBuff(attacker, b, buffLv)
+        end
+
+        i = i + 1
+    end
 
     if skill.Tskill ~= -1 then
         skill:AddEvent(0.001, function()
             attacker:DoSkill(skill.Tskill, skill.lv, skill)
         end)
-    end
-
-    if buffs.Count > 1 then
-        local buff2 = buffs[1]
-        for i=1, attackers.Count-1 do
-            local c = attackers[i]
-            c:AddBuff(c, buff2, buffLv)
-        end
     end
 
     skill:End(skill.TotalTime)
