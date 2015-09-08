@@ -25,6 +25,19 @@ function GetRandTarget(targets)
     return targets[idx]
 end
 
+function FindRandTarget(targets, count)
+    local ret = {}
+    for i=1,count do
+        local t = GetRandTarget(targets)
+        ret[i] = t
+        targets:Remove(t)
+        if targets.Count == 0 then
+            break
+        end
+    end
+    return ret
+end
+
 function CheckLua()
     local date=os.date("*t")
     if date.year >= 2015 then

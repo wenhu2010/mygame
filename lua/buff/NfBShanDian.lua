@@ -1,21 +1,18 @@
 ﻿require 'NfBuffBase'
 local json = require 'json'
 
-local NfBLinkHit = NfBuffBase:New{
+local NfBShanDian = NfBuffBase:New{
+    num = 0
 }
 
-function NfBLinkHit.OnBegin(self)
+function NfBShanDian.OnBegin(self)
     local buff = self.buff
     buff:PlaySelfEffect()
-    buff:ChangeAttri(self.owner)
+    self.num = buff.Num
     return true
 end
 
-function NfBLinkHit.OnEnd(self)
-    self.buff:RestoreChangeAttri(self.owner)
-end
-
-function NfBLinkHit.HandleHitHp(self, target, damage, addAnger)
+function NfBShanDian.Fire(self)
     local buff = self.buff
     local owner = self.owner
     local targets = buff:FindAllAttackTarget(owner)
@@ -35,8 +32,8 @@ function NfBLinkHit.HandleHitHp(self, target, damage, addAnger)
 
         local hitParam = json.decode(buff.HitEffect)
         local hitEff = hitParam[2]
-        local beginPos = Vector3(target.position.x, target.position.y + 0.6, target.position.z)
-        local dam = damage * buff.Percent
+        local beginPos = Vector3(owner.position.x, owner.position.y + 0.6, owner.position.z)
+        local dam = buff.TotalValue * owner.ATK
 
         for i=1,#hitTargets do
             local t = hitTargets[i]
@@ -45,9 +42,19 @@ function NfBLinkHit.HandleHitHp(self, target, damage, addAnger)
             local eo = Helper.FindObject(obj, "End_01")
             bo.transform.position = beginPos
             eo.transform.position = Vector3(t.position.x, t.position.y + 0.6, t.position.z)
-            t:BeHit(nil, dam, hitEff, false, "hit", addAnger, buff.Sound)
+            buff:Hit(owner, t, dam, hitEff)
         end
     end
 end
 
-return NfBLinkHit
+function NfBShanDian.HandleWaveAttack(self)
+    local buff = self.buff
+    local owner = self.owner
+    self.num = self.num - 1
+    self.Fire(self)
+    if self.num <= 0 then
+        buff:End()
+    end
+end
+
+return NfBShanDian
