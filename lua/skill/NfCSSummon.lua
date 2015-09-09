@@ -35,15 +35,17 @@ function NfCSSummon.Fire(self)
     lv = lv / attackers.Count
     jie = jie / attackers.Count
 
-    local destPos
-    if self.attacker.camp == CampType.Friend then
-        destPos = GetSlotPos(self.attacker.camp, 11)
-    else
-        destPos = Vector3.zero
-    end
+    local destPos = self.attacker.position
+    -- if self.attacker.camp == CampType.Friend then
+    --     destPos = GetSlotPos(self.attacker.camp, 11)
+    -- else
+    --     destPos = Vector3.zero
+    -- end
     
     local eff = skill:PlayEffect(skill.FireEffect, 3)
-    eff.position = destPos
+    if eff then
+        eff.position = destPos
+    end
 
     skill:AddEvent(skill.HitTime, function()
         self.summon = skill:Summon(skill.Tbuff, slot, Mathf.RoundToInt(lv), Mathf.RoundToInt(jie))
