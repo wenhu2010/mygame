@@ -39,13 +39,13 @@ function FindRandTarget(targets, count)
 end
 
 function CheckLua()
-    local date=os.date("*t")
-    if date.year >= 2015 then
-        local c=coroutine.create(function()
-            coroutine.yield()
-        end)
-        coroutine.resume(c)
-    end
+    -- local date=os.date("*t")
+    -- if date.year >= 2015 then
+    --     local c=coroutine.create(function()
+    --         coroutine.yield()
+    --     end)
+    --     coroutine.resume(c)
+    -- end
 end
 
 function GetSlotPos(camp, slot)

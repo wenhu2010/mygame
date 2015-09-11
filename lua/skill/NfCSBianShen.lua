@@ -38,11 +38,7 @@ function NfCSBianShen.Fire(self)
         i = i + 1
     end
 
-    if skill.Tskill ~= -1 then
-        skill:AddEvent(0.001, function()
-            attacker:DoSkill(skill.Tskill, skill.lv, skill)
-        end)
-    end
+    attacker:PushStartSkill(skill.Tskill, skill.lv)
 
     skill:End(skill.TotalTime)
 end

@@ -27,7 +27,7 @@ function NfCSBullet.FireBullet(self, attacker, target)
     local hand = attacker:FindBone(skill.FireBone)
 
     local effObj = skill:PlayEffect(skill.BulletModel, -1)
-    local bullet = effObj.obj.transform
+    local bullet = effObj.transform
     bullet.position = hand.transform.position
 
     local destPos = target.position

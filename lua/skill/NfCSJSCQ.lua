@@ -9,7 +9,7 @@ function NfCSJSCQ.onBegin(self)
     NfCSBase.onBegin(self, 2)
 
     skill:AddEvent(skill.SingTime, function()
-        self.Fire(self)
+        self:Fire()
     end)
 end
 
@@ -28,7 +28,7 @@ function NfCSJSCQ.Fire(self)
 
     skill:AddEvent(skill.HitTime, function()
         local pos = Fight.Inst:GetSlotPos(RevCamp(attacker.camp), 2)
-        skill:FireDirBullet(targets, GetSlotPos(attacker.camp, 0), pos, skill.BulletModel, skill.BulletSpeed, dam, 1, 0, skill.BulletRadius)
+        skill:FireDirBullet(GetSlotPos(attacker.camp, 0), pos, skill.BulletModel, skill.BulletSpeed, dam, 1, 0, skill.BulletRadius)
     end)
 
     skill:End(skill.TotalTime)
@@ -42,7 +42,7 @@ end
 function NfCSJSCQ.onEnd(self)
     self.skill:ShowScene()
     self.skill:ShowAllFriend()
-    self.MoveSrc(self)
+    self:MoveSrc()
 end
 
 return NfCSJSCQ

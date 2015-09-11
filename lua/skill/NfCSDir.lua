@@ -26,11 +26,11 @@ function NfCSDir.Fire( self )
         c:LookAt(target)
     end
 
-    skill:FireDirBullet(targets, attacker.position, target.position, skill.BulletModel, skill.BulletSpeed, dam, skill.AtkC, skill.HitTime)
+    skill:FireDirBullet(attacker.position, target.position, skill.BulletModel, skill.BulletSpeed, dam, skill.AtkC, skill.HitTime)
 
     if skill.MaxNum > 0 then
         target = skill:GetSecondAttackTarget()
-        skill:FireDirBullet(targets, attacker.position, target.position, skill.BulletModel, skill.BulletSpeed, dam, skill.AtkC, skill.HitTime)
+        skill:FireDirBullet(attacker.position, target.position, skill.BulletModel, skill.BulletSpeed, dam, skill.AtkC, skill.HitTime)
     end
 
     skill:End(skill.TotalTime)

@@ -10,7 +10,7 @@ function NfCSSummon.onBegin(self)
     NfCSBase.onBegin(self, 2)
 
     skill:AddEvent(skill.SingTime, function()
-        self.Fire(self)
+        self:Fire()
     end)
 end
 
@@ -35,13 +35,7 @@ function NfCSSummon.Fire(self)
     lv = lv / attackers.Count
     jie = jie / attackers.Count
 
-    local destPos = self.attacker.position
-    -- if self.attacker.camp == CampType.Friend then
-    --     destPos = GetSlotPos(self.attacker.camp, 11)
-    -- else
-    --     destPos = Vector3.zero
-    -- end
-    
+    local destPos = self.attacker.position    
     local eff = skill:PlayEffect(skill.FireEffect, 3)
     if eff then
         eff.position = destPos
@@ -50,6 +44,7 @@ function NfCSSummon.Fire(self)
     skill:AddEvent(skill.HitTime, function()
         self.summon = skill:Summon(skill.Tbuff, slot, Mathf.RoundToInt(lv), Mathf.RoundToInt(jie))
         self.summon.position = destPos
+        self.summon:PushStartSkill(skill.Tskill, skill.lv)
     end)
 
     skill:End(skill.TotalTime)

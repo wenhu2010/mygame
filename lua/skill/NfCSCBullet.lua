@@ -25,7 +25,7 @@ function NfCSCBullet.Fire( self )
     for n=0,skill.AtkC-1 do
         skill:AddEvent(skill.HitTime*n, function()            
             for i=1,#sp do
-                skill:FireBullet(sp[i], dp[i], skill.BulletModel, skill.BulletSpeed, 1, dam)
+                skill:FireDirCollideBullet(sp[i], dp[i], skill.BulletModel, skill.BulletSpeed, 1, dam, nil)
             end
         end)
     end
