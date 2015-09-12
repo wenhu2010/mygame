@@ -3,17 +3,17 @@
 local NfCSBianShen = NfCSBase:New{
 }
 
-function NfCSBianShen.onBegin(self)
+function NfCSBianShen:onBegin()
     local skill = self.skill
 
     NfCSBase.onBegin(self, 2)
 
     skill:AddEvent(skill.SingTime, function()
-        self.Fire(self)
+        self:Fire()
     end)
 end
 
-function NfCSBianShen.Fire(self)
+function NfCSBianShen:Fire()
     local skill = self.skill
     local attacker = self.attacker
     local attackers = self.attackers
@@ -38,6 +38,11 @@ function NfCSBianShen.Fire(self)
     attacker:PushStartSkill(skill.Tskill, skill.lv)
 
     skill:End(skill.TotalTime)
+end
+
+function NfCSBianShen:OnStopCameraAnim()
+    NfCSBase.OnStopCameraAnim(self)
+    self:IdleAll()
 end
 
 return NfCSBianShen
