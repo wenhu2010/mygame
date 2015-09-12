@@ -19,9 +19,10 @@ function NfCSBianShen.Fire(self)
     local attackers = self.attackers
     local buffs = skill.Buffs
     local tbuffs = skill.Tbuffs
-
+    local buffLv = skill.lv
     local i = 0
-    while i < skill.MaxNum and i < attackers.Count do
+    local num = math.min(skill.MaxNum, buffs.Count, attackers.Count)
+    while i < num do
         local c = attackers[i]
         -- 删除变身buff
         for i=0, tbuffs.Count-1 do
@@ -29,12 +30,8 @@ function NfCSBianShen.Fire(self)
             c:EndBuff(b)
         end
 
-        local buffLv = skill.lv
-        for i=0, buffs.Count-1 do
-            local b = buffs[i]
-            c:AddBuff(attacker, b, buffLv)
-        end
-
+        local b = buffs[i]
+        c:AddBuff(c, b, buffLv)
         i = i + 1
     end
 

@@ -5,7 +5,6 @@ local BBeHitTigger = NfBuffBase:New{
 }
 
 function BBeHitTigger:OnBegin()
-    print "BBeHitTigger"
     local buff = self.buff
     buff:PlaySelfEffect()
     self.num = buff.Num

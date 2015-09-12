@@ -17,7 +17,7 @@ function NfAddHp.onBegin(self)
         end
     end
 
-    local hitEff = HitEffect
+    local hitEff = skill.HitEffect
     local dam = skill.Damage
 
     skill:AddEvent(skill.HitTime, function()
