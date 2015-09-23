@@ -30,7 +30,8 @@ end
 function NfCSMassBrawl.OnStopCameraAnim(self)
     self.skill:ShowScene()
     self.skill:ShowAllFriend()
-    self.MoveSrc(self)
+    self:MoveSrc()
+    self:IdleAll()
 
     ShowChars(self.targets, true)
 end

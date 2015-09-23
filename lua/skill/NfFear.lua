@@ -2,8 +2,7 @@ require 'NfSkillBase'
 
 local NfFear = NfSkillBase:New{
     target,
-    effKeepObj,
-    destPos
+    effKeepObj
 }
 
 function NfFear.onBegin(self)
@@ -39,24 +38,16 @@ function NfFear.Fear(self, target)
     local skill = self.skill
     local attacker = self.attacker
     local slots = skill:GetEmptySlots(RevCamp(attacker.camp))
-    self.destPos = target.position
     local fearPos = target.position
     if slots.Count > 0 then
     	target.slot = slots[0]
-    	self.destPos = Fight.Inst:GetSlotPos(target.camp, target.slot)
-    	target.SrcPos = self.destPos
+    	target.SrcPos = Fight.Inst:GetSlotPos(target.camp, target.slot)
     	Fight.Inst:SortAllChar()
     end
-                
+    
     self.effKeepObj = target:PlayEffect(skill.KeepEffect, -1)
+    target.position = fearPos
     self.FearMove(self, target, fearPos, 4, 0)
-end
-
-function NfFear.RandPos(pos, r)
-    local x = Fight.RandF(pos.x - r, pos.x + r)
-    local z = Fight.RandF(pos.z - r, pos.z + r);
-    z = Mathf.Clamp(z, -4, 3)
-    return Vector3(x, pos.y, z)
 end
 
 function NfFear.FearMove(self, target, fearPos, num, delay)
@@ -64,16 +55,12 @@ function NfFear.FearMove(self, target, fearPos, num, delay)
     local attacker = self.attacker
 
     skill:AddEvent(delay, function()
-        local pos
+        local pos = target.SrcPos
         if num > 1 then        
-            pos = self.RandPos(fearPos, 3)
-        else
-            pos = self.destPos
+            pos = Fight.RandPos(fearPos, 3)
         end
 
         target:LookAt(pos)
-        target:PlayAnim("run", target.moveAnimSpeed)
-
         skill:Move(target, pos, target.moveSpeed, "run", target.moveAnimSpeed, function()
         	num = num - 1
             if num < 1 then
