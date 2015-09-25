@@ -21,6 +21,10 @@ function NfCSCBullet.Fire( self )
 
     local sp = { Vector3(-11, 0, 2), Vector3(-11, 0, 0), Vector3(-11, 0, -2) }
     local dp = { Vector3(20, 0, 2), Vector3(20, 0, 0), Vector3(20, 0, -2) }
+    if self.attacker.camp == CampType.Enemy then
+        sp = { Vector3(11, 0, 2), Vector3(11, 0, 0), Vector3(11, 0, -2) }
+        dp = { Vector3(-20, 0, 2), Vector3(-20, 0, 0), Vector3(-20, 0, -2) }
+    end
 
     for n=0,skill.AtkC-1 do
         skill:AddEvent(skill.HitTime*n, function()            
